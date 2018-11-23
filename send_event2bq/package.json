@@ -1,0 +1,11 @@
+{
+  "name": "stardust-cloud-functions",
+  "version": "0.0.1",
+  "main": "index.js",
+  "dependencies": {
+    "gcloud": "^0.28.0",
+    "node-uuid": "^1.4.7",
+    "moment": "^2.10.6",
+    "moment-timezone": "^0.4.0"
+  }
+}
