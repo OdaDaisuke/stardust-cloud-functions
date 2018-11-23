@@ -2,6 +2,7 @@ const bq = require('gcloud')({ projectId: process.env.BQ_PROJECT_ID }).bigquery(
 const datasetNames = [
     'views',
     'users',
+    'lyric_viwes',
 ]
 
 exports.sendEvent2BQ = (req, res) => {
@@ -10,7 +11,6 @@ exports.sendEvent2BQ = (req, res) => {
     res.header('Access-Control-Allow-Credentials', true)
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, X-Requested-With, Accept')
     res.header('Access-Control-Allow-Methods', 'POST,OPTIONS')
-
 
     // 一旦外す
     // Lib.auth(req, res)
@@ -58,9 +58,9 @@ exports.sendEvent2BQ = (req, res) => {
 }
 
 class TableOperator {
-    // 全てのテーブルで共通するカラム
-    get commonParams () {
-        return [
+    static schemes() {
+        // 全てのテーブルで共通するカラム
+        const commonParams = [
             {
                 "type": "timestamp",
                 "mode": "required",
@@ -101,18 +101,16 @@ class TableOperator {
                 "name": "currentUrl",
             },
         ]
-    }
 
-    static schemes() {
         return {
             views: {
                 schema: {
                     "fields": [
                         {
                             "type": "string",
-                            "name": "userId",
+                            "name": "userID",
                         },
-                    ].concat(commonParams),
+                    ].concat(this.commonParams),
                 },
             },
             users: {
@@ -120,9 +118,23 @@ class TableOperator {
                     "fields": [
                         {
                             "type": "string",
-                            "name": "userId",
+                            "name": "oauthID",
                         },
-                    ].concat(commonParams),
+                    ].concat(this.commonParams),
+                },
+            },
+            lyric_views: {
+                schema: {
+                    "fields": [
+                        {
+                            "type": "string",
+                            "name": "userID",
+                        },
+                        {
+                            "type": "string",
+                            "name": "lyricID",
+                        },
+                    ].concat(this.commonParams),
                 },
             },
         }
